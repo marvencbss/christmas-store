@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Natalê - Trazendo estilo às suas festas!</title>
+<link rel="icon" type="image/png" href="img/favicon.jpeg">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<style>
+    html {
+        background-color:#ffedcd;
+        color:#000;
+    }
+    body{
+        margin:0;
+        font-family:Arial, sans-serif;
+        background:#ffedcd;
+        color:#000;
+    }
+    header{
+        background:#7d5147;
+        text-align:center;
+        color:#fff;
+        padding:1rem;
+        font-size:1.5rem;
+        font-weight:bold;
+    }
+    nav{
+        display:flex;
+        justify-content:center;
+        gap:1rem;
+        padding:.7rem;
+        background:#a52526;
+    }
+
+    nav button{
+        border:none;
+        background:#fff;
+        padding:.5rem 1rem;
+        border-radius:5px;
+        cursor:pointer;
+        font-weight:bold;
+    }
+    main{
+        padding:2rem;
+        text-align:center;
+        min-height:60vh;
+    }
+    .card-area{
+        display:flex;
+        gap:1rem;
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+    .card{
+        background:#fff;
+        border:2px solid #7d5147;
+        border-radius:10px;
+        padding:1rem;
+        width:190px;
+    }
+    .card img{
+        width:100%;
+        height:130px;
+        object-fit:cover;
+    }
+    .hidden{
+        display:none;
+    }
+    .tituloCat{
+        width:100%;
+        font-size:1.3rem;
+        font-weight:bold;
+        margin-top:20px;
+        color:#7d5147;
+        text-align:center;
+    }
+    form{
+        display:flex;
+        flex-direction:column;
+        max-width:300px;
+        margin:auto;
+        gap:.7rem;
+    }
+    input{
+        padding:.5rem;
+        border:1px solid #7d5147;
+        border-radius:5px;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Nossos produtos</header>
+
+<nav>
+<button onclick="mostrarCadastro()">Cadastrar</button>
+<button onclick="mostrarLista()">Listar Produtos</button>
+<button onclick="mostrarFavoritos()">Favoritos</button>
+</nav>
+
+<main>
+
+<div id="cadastro" class="hidden">
+<h2>Cadastrar Produto</h2>
+<form onsubmit="addProduto(event)">
+<input id="idProd" placeholder="Id">
+<input id="descProd" placeholder="Descrição">
+<input id="precoProd" placeholder="Preço">
+<input id="qtdProd" placeholder="Quantidade">
+<button type="submit">Cadastrar</button>
+</form>
+</div>
+
+<div id="lista">
+<h2>Lista de Produtos</h2>
+<div class="card-area" id="listaProdutos"></div>
+</div>
+
+<div id="favoritos" class="hidden">
+<h2>Favoritos</h2>
+<div class="card-area" id="listaFavoritos"></div>
+</div>
+
+</main>
+
+<script>
+
+let cadastro = document.getElementById("cadastro")
+let lista = document.getElementById("lista")
+let favoritos = document.getElementById("favoritos")
+let listaProdutos = document.getElementById("listaProdutos")
+let listaFavoritos = document.getElementById("listaFavoritos")
+
+let produtos=[
+{
+    categoria:"Kits",
+    descricao:"Kit infantil",
+    preco:"R$ 59,90",
+    img:"img/3.png"},
+{
+    categoria:"Kits",
+    descricao:"Kit colorido",
+    preco:"R$ 79,90",
+    img:"img/4.png"},
+{
+    categoria:"Kits",
+    descricao:"Kit classic",
+    preco:"R$ 59,90",
+    img:"img/5.png"},
+{
+    categoria:"Biscoitos",
+    descricao:"Cookie de chocolate",
+    preco:"R$ 9,90/Unid.",
+    img:"img/7.png"},
+{
+    categoria:"Biscoitos"
+    ,descricao:"Biscoito de gengibre",
+    preco:"R$ 12,90/Unid.",
+    img:"img/8.png"},
+{
+    categoria:"Biscoitos",
+    descricao:"Biscoito recheado de framboesa",
+    preco:"R$ 3,90/Unid.",
+    img:"img/9.png"},
+{
+    categoria:"Bolos",
+    descricao:"Bolo chocolate branco",
+    preco:"R$ 89,90",
+    img:"img/11.png"},
+{
+    categoria:"Bolos",
+    descricao:"Bolo chocolate preto c/ chantilly",
+    preco:"R$ 89,90",
+    img:"img/12.png"},
+{
+    categoria:"Bolos",
+    descricao:"Bolo cereja c/ chocolate branco",
+    preco:"R$ 69,90",
+    img:"img/13.png"},
+{
+    categoria:"Bebidas",
+    descricao:"Milkshake de morango",
+    preco:"R$ 29,90",
+    img:"img/15.png"},
+{
+    categoria:"Bebidas",
+    descricao:"Coquetel natalino - Margarita",
+    preco:"R$ 39,90",
+    img:"img/16.png"},
+{
+    categoria:"Bebidas",
+    descricao:"Chocolate quente",
+    preco:"R$ 19,90",
+    img:"img/17.png"}
+]
+
+let favoritosList=JSON.parse(localStorage.getItem("favoritos"))||[]
+
+function salvarFav(){localStorage.setItem("favoritos",JSON.stringify(favoritosList))}
+
+function esconder(){
+cadastro.classList.add("hidden")
+lista.classList.add("hidden")
+favoritos.classList.add("hidden")
+}
+
+function mostrarCadastro(){esconder();cadastro.classList.remove("hidden")}
+
+function mostrarLista(){esconder();lista.classList.remove("hidden");listarProdutos()}
+
+function mostrarFavoritos(){esconder();favoritos.classList.remove("hidden");listarFavoritos()}
+
+function addProduto(e){
+e.preventDefault()
+let d=descProd.value
+let p=precoProd.value
+produtos.push({categoria:"Cadastro",descricao:d,preco:p,img:"img/1.png"})
+mostrarLista()
+}
+
+function listarProdutos(){
+listaProdutos.innerHTML=""
+let cat=""
+produtos.forEach((p,i)=>{
+if(p.categoria!==cat){
+cat=p.categoria
+let t=document.createElement("div")
+t.className="tituloCat"
+t.innerText=cat
+listaProdutos.appendChild(t)
+}
+let c=document.createElement("div")
+c.className="card"
+c.innerHTML=`
+<img src="${p.img}">
+<h3>${p.descricao}</h3>
+<p>${p.preco}</p>
+<button onclick="favoritar(${i})">Favoritar</button>
+`
+listaProdutos.appendChild(c)
+})
+}
+
+function favoritar(i){
+favoritosList.push(produtos[i])
+salvarFav()
+}
+
+function listarFavoritos(){
+listaFavoritos.innerHTML=""
+favoritosList.forEach((p,i)=>{
+let c=document.createElement("div")
+c.className="card"
+c.innerHTML=`
+<img src="${p.img}">
+<h3>${p.descricao}</h3>
+<p>${p.preco}</p>
+<button onclick="removeFav(${i})">Remover</button>
+`
+listaFavoritos.appendChild(c)
+})
+}
+
+function removeFav(i){
+favoritosList.splice(i,1)
+salvarFav()
+listarFavoritos()
+}
+
+</script>
+
+</body>
+</html>
