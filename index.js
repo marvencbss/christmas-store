@@ -83,9 +83,19 @@ let cadastro = document.getElementById("cadastro")
     home.classList.add("hidden");
   }
 
-  function mostrarCadastro(){ esconder(); cadastro.classList.remove("hidden") }
-  function mostrarLista(){ esconder(); lista.classList.remove("hidden"); listarProdutos() }
-  function mostrarFavoritos(){ esconder(); favoritos.classList.remove("hidden"); listarFavoritos() }
+  function mostrarCadastro(){ 
+    esconder(); 
+    cadastro.classList.remove("hidden") 
+}
+
+  function mostrarLista(){ 
+    esconder(); lista.classList.remove("hidden"); 
+    listarProdutos() 
+}
+  function mostrarFavoritos(){ 
+    esconder(); favoritos.classList.remove("hidden"); 
+    listarFavoritos() 
+}
 
   function addProduto(e){
     e.preventDefault()
