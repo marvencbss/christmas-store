@@ -34,15 +34,24 @@ nav {
   justify-content: center;
   gap: 2rem;
   padding: 1rem;
-  background: #e3dcd2;
-  border-top: 15px solid #7d2e2e;
+
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffffff,
+    #ffffff 20px,
+    #7d2e2e 20px,
+    #7d2e2e 40px
+  );
+
+  border-top: none;
   border-bottom: 15px solid #7d2e2e;
 }
 
 nav button {
   border: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.8);
   padding: .5rem 1rem;
+  border-radius: 5px;
   font-size: 1.1rem;
   font-weight: bold;
   color: #7d2e2e;
@@ -50,7 +59,8 @@ nav button {
 }
 
 nav button:hover {
-  text-decoration: underline;
+  background: #ffffff;
+  text-decoration: none;
 }
 
 .gif-bar {
